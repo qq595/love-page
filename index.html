@@ -34,8 +34,39 @@
         }
 
         body.show-background {
-            background: url('fb0a6a17523199320e04f2e6e30b8d56.jpg') center center / cover no-repeat fixed;
             animation: none;
+        }
+
+        /* 图片轮播容器 */
+        .slideshow-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        body.show-background .slideshow-container {
+            display: block;
+        }
+
+        .slideshow-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .slideshow-image.active {
+            opacity: 1;
         }
 
         body.show-background::before {
@@ -416,6 +447,16 @@
     </style>
 </head>
 <body>
+    <!-- 图片轮播容器 -->
+    <div class="slideshow-container">
+        <div class="slideshow-image active" style="background-image: url('fb0a6a17523199320e04f2e6e30b8d56.jpg');"></div>
+        <div class="slideshow-image" style="background-image: url('3b11e9c804f6e67af8b83d28e66e2c8b.jpg');"></div>
+        <div class="slideshow-image" style="background-image: url('a27eb01dda3d46a3c05d5cd9b8c68d4d.jpg');"></div>
+        <div class="slideshow-image" style="background-image: url('1c33e16c8ad42e6c66cbc52ce4e37de7.jpg');"></div>
+        <div class="slideshow-image" style="background-image: url('5e9a00c5afd1ac87f69b23e4f8bfa4ba.jpg');"></div>
+        <div class="slideshow-image" style="background-image: url('6f79cb67f47c8d61ba9b1e9a1ef65d82.jpg');"></div>
+    </div>
+
     <!-- 背景音乐 -->
     <audio id="bgMusic" loop>
         <source src="齐晨 - 咱们结婚吧 (铃声版).mp3" type="audio/mpeg">
@@ -449,6 +490,12 @@
             const answer = input.value.trim();
 
             if (answer === '2') {
+                // 先播放音乐（在用户交互时）
+                const bgMusic = document.getElementById('bgMusic');
+                bgMusic.play().catch(err => {
+                    console.log('音乐播放失败:', err);
+                });
+                
                 // 正确答案
                 error.style.display = 'none';
                 message.style.display = 'block';
@@ -480,11 +527,8 @@
             // 切换背景为图片
             document.body.classList.add('show-background');
             
-            // 播放背景音乐
-            const bgMusic = document.getElementById('bgMusic');
-            bgMusic.play().catch(err => {
-                console.log('音乐播放需要用户交互:', err);
-            });
+            // 启动图片轮播
+            startSlideshow();
             
             // 立即爆发动画
             createBigHeart();
@@ -498,6 +542,23 @@
             startBubbles();
             startPetals();
             startGlowTexts();
+        }
+
+        function startSlideshow() {
+            const images = document.querySelectorAll('.slideshow-image');
+            let currentIndex = 0;
+
+            // 每5秒切换一张图片
+            setInterval(() => {
+                // 隐藏当前图片
+                images[currentIndex].classList.remove('active');
+                
+                // 切换到下一张
+                currentIndex = (currentIndex + 1) % images.length;
+                
+                // 显示新图片
+                images[currentIndex].classList.add('active');
+            }, 5000); // 5秒切换一次
         }
 
         function startFallingEffect() {
