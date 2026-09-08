@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>小测试</title>
+    <title> 三木雅</title>
     <style>
         * {
             margin: 0;
@@ -62,7 +62,7 @@
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1s ease-in-out;
         }
 
         .slideshow-image.active {
@@ -548,7 +548,9 @@
             const images = document.querySelectorAll('.slideshow-image');
             let currentIndex = 0;
 
-            // 每5秒切换一张图片
+            console.log('轮播开始，共有图片:', images.length);
+
+            // 每3秒切换一张图片
             setInterval(() => {
                 // 隐藏当前图片
                 images[currentIndex].classList.remove('active');
@@ -556,9 +558,11 @@
                 // 切换到下一张
                 currentIndex = (currentIndex + 1) % images.length;
                 
+                console.log('切换到图片:', currentIndex + 1);
+                
                 // 显示新图片
                 images[currentIndex].classList.add('active');
-            }, 5000); // 5秒切换一次
+            }, 3000); // 3秒切换一次
         }
 
         function startFallingEffect() {
