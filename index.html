@@ -565,46 +565,46 @@
         }
 
         function startFallingEffect() {
-            // 创建下落文字
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => createFallingText(), i * 200);
+            // 创建下落文字 - 大幅减少数量
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createFallingText(), i * 400);
             }
-            setInterval(createFallingText, 800);
+            setInterval(createFallingText, 2500);
         }
 
         function startRisingHearts() {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => createRisingHeart(), i * 200);
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => createRisingHeart(), i * 400);
             }
-            setInterval(createRisingHeart, 600);
+            setInterval(createRisingHeart, 2000);
         }
 
         function startSparkles() {
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => createSparkle(), i * 300);
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => createSparkle(), i * 500);
             }
-            setInterval(createSparkle, 400);
+            setInterval(createSparkle, 1500);
         }
 
         function startBubbles() {
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => createBubble(), i * 500);
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createBubble(), i * 800);
             }
-            setInterval(createBubble, 1200);
+            setInterval(createBubble, 3000);
         }
 
         function startPetals() {
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => createPetal(), i * 400);
+            for (let i = 0; i < 6; i++) {
+                setTimeout(() => createPetal(), i * 600);
             }
-            setInterval(createPetal, 700);
+            setInterval(createPetal, 2000);
         }
 
         function startGlowTexts() {
-            for (let i = 0; i < 8; i++) {
-                setTimeout(() => createGlowText(), i * 600);
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => createGlowText(), i * 1000);
             }
-            setInterval(createGlowText, 1500);
+            setInterval(createGlowText, 3500);
         }
 
         function createFallingText() {
