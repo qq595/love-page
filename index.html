@@ -665,13 +665,13 @@
         }
 
         function createFallingText() {
-            const texts = ['我爱你媳妇 ❤️', '永远爱你 ❤️', '你是我的 ❤️', '爱你哦 ❤️'];
+            const texts = ['我爱你媳妇 ❤️', '永远爱你 ❤️', '你是我的宝贝 ❤️', '爱你哦 ❤️'];
             const text = document.createElement('div');
             text.className = 'falling';
             text.textContent = texts[Math.floor(Math.random() * texts.length)];
             text.style.left = Math.random() * 100 + '%';
             text.style.fontSize = (16 + Math.random() * 16) + 'px';
-            text.style.color = ['#ff6b6b', '#e74c3c', '#c0392b', '#e056fd', '#686de0', '#ff9ff3'][Math.floor(Math.random() * 6)];
+            text.style.color = 'rgba(255, 107, 107, 0.4)';
             text.style.animationDuration = (5 + Math.random() * 5) + 's';
             document.body.appendChild(text);
 
