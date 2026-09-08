@@ -444,6 +444,60 @@
                 transform: translateX(200px) rotate(720deg);
             }
         }
+
+        /* 顶部情话文字 */
+        .love-quote {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 
+                0 0 10px rgba(255, 107, 107, 0.8),
+                0 0 20px rgba(224, 86, 253, 0.6),
+                0 0 30px rgba(102, 126, 234, 0.4),
+                2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: quoteGlow 2s ease-in-out infinite;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .love-quote {
+                font-size: 14px;
+                padding: 8px 16px;
+                top: 10px;
+                white-space: normal;
+                text-align: center;
+                max-width: 90%;
+            }
+        }
+
+        @keyframes quoteGlow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 10px rgba(255, 107, 107, 0.8),
+                    0 0 20px rgba(224, 86, 253, 0.6),
+                    0 0 30px rgba(102, 126, 234, 0.4),
+                    2px 2px 4px rgba(0, 0, 0, 0.5);
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                text-shadow: 
+                    0 0 20px rgba(255, 107, 107, 1),
+                    0 0 30px rgba(224, 86, 253, 0.8),
+                    0 0 40px rgba(102, 126, 234, 0.6),
+                    2px 2px 6px rgba(0, 0, 0, 0.6);
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
     </style>
 </head>
 <body>
@@ -460,6 +514,9 @@
     <audio id="bgMusic" loop>
         <source src="齐晨 - 咱们结婚吧 (铃声版).mp3" type="audio/mpeg">
     </audio>
+
+    <!-- 顶部情话 -->
+    <div class="love-quote">💔😭目光所及皆是你，亿万星辰不及你😭💔</div>
 
     <div class="container">
         <div class="heart-bg">❤️</div>
