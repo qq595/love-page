@@ -416,6 +416,11 @@
     </style>
 </head>
 <body>
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="齐晨 - 咱们结婚吧 (铃声版).mp3" type="audio/mpeg">
+    </audio>
+
     <div class="container">
         <div class="heart-bg">❤️</div>
         <div class="question">1 + 1 = ?</div>
@@ -474,6 +479,12 @@
             
             // 切换背景为图片
             document.body.classList.add('show-background');
+            
+            // 播放背景音乐
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.play().catch(err => {
+                console.log('音乐播放需要用户交互:', err);
+            });
             
             // 立即爆发动画
             createBigHeart();
