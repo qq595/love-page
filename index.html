@@ -265,6 +265,7 @@
             white-space: nowrap;
             font-weight: bold;
             text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            opacity: 0.3;
         }
 
         @keyframes fall {
@@ -410,15 +411,14 @@
             color: #fff;
             text-shadow: 0 0 10px #ff6b6b, 0 0 20px #e056fd, 0 0 30px #667eea;
             animation: glowPulse 0.8s ease-in-out infinite;
+            opacity: 0.25;
         }
 
         @keyframes glowPulse {
             0%, 100% {
-                opacity: 0.8;
                 transform: scale(1);
             }
             50% {
-                opacity: 1;
                 transform: scale(1.3);
             }
         }
