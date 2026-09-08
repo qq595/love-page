@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .question {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin: 30px 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 24px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            font-size: 36px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease, pulse 1.5s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 18px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .heart {
+            display: none;
+            font-size: 80px;
+            margin-top: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        /* 满屏飘落效果 */
+        .falling {
+            position: fixed;
+            animation: fall linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+            }
+            100% {
+                top: 100vh;
+            }
+        }
+
+        /* 上升爱心效果 */
+        .rising-heart {
+            position: fixed;
+            animation: rise linear infinite;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 30px;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -50px;
+                opacity: 1;
+            }
+            100% {
+                bottom: 100vh;
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="question">1 + 1 = ?</div>
+        <div class="input-group">
+            <input type="text" id="answer" placeholder="请输入答案" maxlength="10">
+        </div>
+        <button onclick="checkAnswer()">提交</button>
+        <div class="error" id="error">答案不对哦，再想想~</div>
+        <div class="message" id="message">我爱你媳妇 ❤️</div>
+        <div class="heart" id="heart" style="display: none;"></div>
+    </div>
+
+    <script>
+        const input = document.getElementById('answer');
+        const message = document.getElementById('message');
+        const error = document.getElementById('error');
+        const heart = document.getElementById('heart');
+        const button = document.querySelector('button');
+
+        // 回车键提交
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        function checkAnswer() {
+            const answer = input.value.trim();
+            
+            if (answer === '2') {
+                // 正确答案
+                error.style.display = 'none';
+                message.style.display = 'block';
+                heart.style.display = 'none';
+                input.disabled = true;
+                button.style.display = 'none';
+                
+                // 添加烟花效果
+                createFireworks();
+                
+                // 开始满屏飘落和上升效果
+                startFallingEffect();
+            } else {
+                // 错误答案
+                error.style.display = 'block';
+                message.style.display = 'none';
+                heart.style.display = 'none';
+                input.value = '';
+                input.focus();
+                
+                // 摇晃效果
+                input.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    input.style.animation = '';
+                }, 500);
+            }
+        }
+
+        function startFallingEffect() {
+            // 创建30个下落的"我爱你媳妇"
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createFallingText();
+                }, i * 300);
+            }
+            
+            // 创建30个上升的爱心
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createRisingHeart();
+                }, i * 300);
+            }
+            
+            // 持续创建新的元素
+            setInterval(createFallingText, 1000);
+            setInterval(createRisingHeart, 1000);
+        }
+
+        function createFallingText() {
+            const text = document.createElement('div');
+            text.className = 'falling';
+            text.textContent = '我爱你媳妇';
+            text.style.left = Math.random() * 100 + '%';
+            text.style.fontSize = (20 + Math.random() * 20) + 'px';
+            text.style.color = ['#ff6b6b', '#e74c3c', '#c0392b', '#e056fd', '#686de0'][Math.floor(Math.random() * 5)];
+            text.style.animationDuration = (5 + Math.random() * 5) + 's';
+            document.body.appendChild(text);
+            
+            setTimeout(() => text.remove(), 12000);
+        }
+
+        function createRisingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'rising-heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+            heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 10000);
+        }
+
+        function createFireworks() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.style.position = 'fixed';
+                    firework.style.left = Math.random() * 100 + '%';
+                    firework.style.top = Math.random() * 100 + '%';
+                    firework.style.width = '10px';
+                    firework.style.height = '10px';
+                    firework.style.borderRadius = '50%';
+                    firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    firework.style.pointerEvents = 'none';
+                    firework.style.animation = 'explode 1s ease-out forwards';
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(() => firework.remove(), 1000);
+                }, i * 50);
+            }
+        }
+
+        // 添加摇晃动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+            @keyframes explode {
+                to {
+                    transform: translate(calc(50vw - 50%), calc(50vh - 50%)) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
