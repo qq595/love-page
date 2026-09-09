@@ -682,6 +682,25 @@
             }
         }
 
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
         .modal-title {
             font-size: 20px;
             font-weight: bold;
@@ -986,8 +1005,8 @@
             <div class="modal-title" id="modalTitle">三木雅</div>
             <input type="text" class="modal-input" id="modalInput" placeholder="请输入内容">
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-confirm" onclick="confirmEdit()">确定</button>
-                <button class="modal-btn modal-btn-cancel" onclick="cancelEdit()">取消</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirm">确定</button>
+                <button class="modal-btn modal-btn-cancel" id="modalCancel">取消</button>
             </div>
         </div>
     </div>
@@ -1250,8 +1269,33 @@
             const newValue = document.getElementById('modalInput').value.trim();
             if (newValue !== '' && editCallback) {
                 editCallback(newValue);
+                // 显示保存成功提示
+                showSaveSuccess();
             }
             closeCustomModal();
+        }
+
+        // 显示保存成功提示
+        function showSaveSuccess() {
+            const msg = document.createElement('div');
+            msg.textContent = '✅ 保存成功';
+            msg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(76, 175, 80, 0.95);
+                color: white;
+                padding: 15px 30px;
+                border-radius: 10px;
+                font-size: 18px;
+                font-weight: bold;
+                z-index: 30000;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                animation: fadeInOut 2s ease;
+            `;
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
         }
 
         // 取消编辑
@@ -1272,7 +1316,6 @@
                 photoData[index].caption = newCaption;
                 saveToStorage();
                 updatePhotoCaption(currentPhotoIndex);
-                alert('✅ 修改成功！已保存');
             });
         }
 
@@ -1286,7 +1329,6 @@
                 sweetMessages[currentMessageIndex] = newMsg;
                 saveToStorage();
                 updateRandomMessage();
-                alert('✅ 修改成功！已保存');
             });
         }
 
@@ -1371,6 +1413,10 @@
                 e.stopPropagation();
                 editCurrentMessage();
             });
+
+            // 自定义弹窗按钮事件
+            document.getElementById('modalConfirm').addEventListener('click', confirmEdit);
+            document.getElementById('modalCancel').addEventListener('click', cancelEdit);
 
             // 自定义弹窗键盘支持
             document.getElementById('modalInput').addEventListener('keydown', (e) => {
