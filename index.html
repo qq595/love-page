@@ -1037,7 +1037,7 @@
         <div class="input-group">
             <input type="text" id="answer" placeholder="请输入答案" maxlength="10" inputmode="numeric">
         </div>
-        <button onclick="checkAnswer()">提交</button>
+        <button id="submitBtn" onclick="checkAnswer()">提交</button>
         <div class="error" id="error">答案不对哦，再想想~</div>
         <div class="message" id="message">我爱你媳妇 ❤️</div>
     </div>
@@ -1198,7 +1198,7 @@
             enableInteractions();
             
             // 每10秒更换一次留言
-            setInterval(updateRandomMessage, 10000);
+            messageInterval = setInterval(updateRandomMessage, 10000);
         }
 
         function startSlideshow() {
@@ -1206,7 +1206,7 @@
             updatePhotoCaption(0);
 
             // 每5秒切换一张图片
-            setInterval(() => {
+            photoInterval = setInterval(() => {
                 changePhoto(1);
             }, 5000);
         }
@@ -1274,6 +1274,8 @@
 
         // 自定义弹窗相关变量
         let editCallback = null;
+        let messageInterval = null;
+        let photoInterval = null;
 
         // 显示自定义编辑弹窗
         function showCustomModal(title, currentValue, callback) {
@@ -1282,6 +1284,9 @@
             document.getElementById('customModal').classList.add('show');
             document.getElementById('modalInput').focus();
             editCallback = callback;
+            
+            // 暂停自动切换
+            pauseAutoSwitch();
         }
 
         // 确认编辑
@@ -1327,6 +1332,35 @@
         function closeCustomModal() {
             document.getElementById('customModal').classList.remove('show');
             editCallback = null;
+            
+            // 恢复自动切换
+            resumeAutoSwitch();
+        }
+        
+        // 暂停自动切换
+        function pauseAutoSwitch() {
+            if (messageInterval) {
+                clearInterval(messageInterval);
+                messageInterval = null;
+            }
+            if (photoInterval) {
+                clearInterval(photoInterval);
+                photoInterval = null;
+            }
+        }
+        
+        // 恢复自动切换
+        function resumeAutoSwitch() {
+            // 恢复留言切换
+            if (!messageInterval) {
+                messageInterval = setInterval(updateRandomMessage, 10000);
+            }
+            // 恢复照片切换
+            if (!photoInterval) {
+                photoInterval = setInterval(() => {
+                    changePhoto(1);
+                }, 5000);
+            }
         }
 
         // 编辑照片标题
