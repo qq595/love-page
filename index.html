@@ -716,6 +716,7 @@
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s ease;
+            margin-bottom: 5px;
         }
 
         .modal-input:focus {
@@ -725,12 +726,14 @@
         .modal-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 25px;
             justify-content: center;
+            position: relative;
+            z-index: 20003;
         }
 
         .modal-btn {
-            padding: 10px 30px;
+            padding: 12px 35px;
             border: none;
             border-radius: 10px;
             font-size: 16px;
@@ -739,12 +742,14 @@
             font-weight: bold;
             display: inline-block;
             position: relative;
-            z-index: 20002;
+            z-index: 20004;
+            min-width: 100px;
         }
 
         .modal-btn-confirm {
             background: #ff6b6b;
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
         }
 
         .modal-btn-confirm:hover {
@@ -755,6 +760,7 @@
         .modal-btn-cancel {
             background: #ddd;
             color: #666;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .modal-btn-cancel:hover {
