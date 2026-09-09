@@ -554,7 +554,7 @@
             height: 50px;
             background: rgba(255, 107, 107, 0.9);
             border-radius: 50%;
-            display: none;
+            display: flex !important;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -565,10 +565,6 @@
         .music-control:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .music-control.show {
-            display: flex;
         }
 
         .music-control::before {
@@ -669,6 +665,8 @@
             max-width: 500px;
             width: 90%;
             animation: modalShow 0.3s ease;
+            position: relative;
+            z-index: 20001;
         }
 
         @keyframes modalShow {
@@ -739,6 +737,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
+            display: inline-block;
+            position: relative;
+            z-index: 20002;
         }
 
         .modal-btn-confirm {
@@ -1432,6 +1433,11 @@
                 if (e.target.id === 'customModal') {
                     cancelEdit();
                 }
+            });
+
+            // 阻止点击弹窗内容区域时关闭
+            document.querySelector('.modal-content').addEventListener('click', (e) => {
+                e.stopPropagation();
             });
         }
 
