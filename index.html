@@ -1151,7 +1151,8 @@
 
         // 编辑照片标题
         function editPhotoCaption(index) {
-            const newCaption = prompt('修改照片标题：', photoData[index].caption);
+            const currentCaption = photoData[index].caption;
+            const newCaption = prompt('✏️ 修改当前照片标题：', currentCaption);
             if (newCaption !== null && newCaption.trim() !== '') {
                 photoData[index].caption = newCaption.trim();
                 saveToStorage();
@@ -1160,25 +1161,25 @@
             }
         }
 
-        // 编辑留言墙
-        function editMessages() {
-            const currentMessages = sweetMessages.join('\n');
-            const newMessages = prompt('编辑留言（每行一条）：\n', currentMessages);
-            if (newMessages !== null && newMessages.trim() !== '') {
-                const lines = newMessages.split('\n').filter(line => line.trim() !== '');
-                if (lines.length > 0) {
-                    sweetMessages.length = 0;
-                    sweetMessages.push(...lines);
-                    saveToStorage();
-                    updateRandomMessage();
-                    alert('✅ 修改成功！已保存');
-                }
+        // 当前显示的留言索引
+        let currentMessageIndex = 0;
+
+        // 编辑留言墙 - 只编辑当前这一条
+        function editCurrentMessage() {
+            const currentMsg = sweetMessages[currentMessageIndex];
+            const newMsg = prompt('✏️ 修改当前留言：', currentMsg);
+            if (newMsg !== null && newMsg.trim() !== '') {
+                sweetMessages[currentMessageIndex] = newMsg.trim();
+                saveToStorage();
+                updateRandomMessage();
+                alert('✅ 修改成功！已保存');
             }
         }
 
         function updateRandomMessage() {
             const messageEl = document.getElementById('sweetMessage');
-            const randomMsg = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+            currentMessageIndex = Math.floor(Math.random() * sweetMessages.length);
+            const randomMsg = sweetMessages[currentMessageIndex];
             messageEl.textContent = randomMsg;
             messageEl.classList.remove('show');
             setTimeout(() => messageEl.classList.add('show'), 100);
@@ -1188,7 +1189,8 @@
             // 音乐控制
             const musicControl = document.getElementById('musicControl');
             const bgMusic = document.getElementById('bgMusic');
-            musicControl.addEventListener('click', () => {
+            musicControl.addEventListener('click', (e) => {
+                e.stopPropagation(); // 阻止触发背景点击事件
                 if (bgMusic.paused) {
                     bgMusic.play();
                     musicControl.classList.remove('paused');
@@ -1199,8 +1201,14 @@
             });
 
             // 照片切换按钮
-            document.getElementById('navPrev').addEventListener('click', () => changePhoto(-1));
-            document.getElementById('navNext').addEventListener('click', () => changePhoto(1));
+            document.getElementById('navPrev').addEventListener('click', (e) => {
+                e.stopPropagation();
+                changePhoto(-1);
+            });
+            document.getElementById('navNext').addEventListener('click', (e) => {
+                e.stopPropagation();
+                changePhoto(1);
+            });
 
             // 点击屏幕爱心爆炸 + 2连击彩蛋
             document.body.addEventListener('click', (e) => {
@@ -1244,10 +1252,10 @@
                 editPhotoCaption(currentPhotoIndex);
             });
 
-            // 点击留言墙编辑
+            // 点击留言墙编辑当前这一条
             document.getElementById('sweetMessage').addEventListener('click', (e) => {
                 e.stopPropagation();
-                editMessages();
+                editCurrentMessage();
             });
         }
 
