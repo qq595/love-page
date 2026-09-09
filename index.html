@@ -716,56 +716,59 @@
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s ease;
-            margin-bottom: 5px;
+            margin-bottom: 20px;
+            resize: vertical;
+            font-family: inherit;
         }
 
         .modal-input:focus {
             border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
         }
 
         .modal-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 25px;
+            gap: 15px;
+            margin-top: 0;
             justify-content: center;
-            position: relative;
-            z-index: 20003;
+            flex-wrap: wrap;
         }
 
         .modal-btn {
-            padding: 12px 35px;
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 20px;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
-            display: inline-block;
-            position: relative;
-            z-index: 20004;
-            min-width: 100px;
+            text-align: center;
         }
 
         .modal-btn-confirm {
             background: #ff6b6b;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            order: 1;
         }
 
         .modal-btn-confirm:hover {
             background: #ff5252;
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
 
         .modal-btn-cancel {
-            background: #ddd;
+            background: #e0e0e0;
             color: #666;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            order: 2;
         }
 
         .modal-btn-cancel:hover {
-            background: #ccc;
-            transform: scale(1.05);
+            background: #d0d0d0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* 点击爱心爆炸 */
@@ -1010,10 +1013,10 @@
     <div class="custom-modal" id="customModal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">三木雅</div>
-            <input type="text" class="modal-input" id="modalInput" placeholder="请输入内容">
+            <textarea class="modal-input" id="modalInput" placeholder="请输入内容" rows="3"></textarea>
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-confirm" id="modalConfirm">确定</button>
-                <button class="modal-btn modal-btn-cancel" id="modalCancel">取消</button>
+                <button type="button" class="modal-btn modal-btn-confirm" id="modalConfirm">✓ 确定</button>
+                <button type="button" class="modal-btn modal-btn-cancel" id="modalCancel">✕ 取消</button>
             </div>
         </div>
     </div>
