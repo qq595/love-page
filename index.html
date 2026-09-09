@@ -731,6 +731,30 @@
             user-select: none;
         }
 
+        /* 随机留言墙 */
+        .sweet-message {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+            font-size: 18px;
+            color: #ff6b6b;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .sweet-message.show {
+            opacity: 1;
+        }
+
         @media (max-width: 480px) {
             .photo-caption {
                 font-size: 14px;
@@ -740,9 +764,13 @@
                 font-size: 13px;
                 top: 50px;
             }
-            .random-message {
-                font-size: 12px;
-                top: 85px;
+            .sweet-message {
+                font-size: 14px;
+                padding: 10px 20px;
+                bottom: 100px;
+                max-width: 90%;
+                white-space: normal;
+                text-align: center;
             }
             .nav-button {
                 width: 40px;
@@ -830,6 +858,9 @@
 
     <!-- 音乐控制 -->
     <div class="music-control" id="musicControl"></div>
+
+    <!-- 随机留言墙 -->
+    <div class="sweet-message" id="sweetMessage">你是我的唯一 💕</div>
 
     <!-- 照片切换按钮 -->
     <div class="nav-button nav-prev show" id="navPrev">◀</div>
@@ -983,7 +1014,7 @@
             
             // 显示随机留言
             updateRandomMessage();
-            document.getElementById('randomMessage').classList.add('show');
+            document.getElementById('sweetMessage').classList.add('show');
             
             // 启动图片轮播
             startSlideshow();
@@ -1052,7 +1083,7 @@
         }
 
         function updateRandomMessage() {
-            const messageEl = document.getElementById('randomMessage');
+            const messageEl = document.getElementById('sweetMessage');
             const randomMsg = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
             messageEl.textContent = randomMsg;
             messageEl.classList.remove('show');
