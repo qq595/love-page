@@ -643,6 +643,105 @@
         }
 
         /* 随机留言 */
+        /* 自定义编辑弹窗 */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff 0%, #ffe6f0 100%);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.3);
+            max-width: 500px;
+            width: 90%;
+            animation: modalShow 0.3s ease;
+        }
+
+        @keyframes modalShow {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffb3c6;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .modal-input:focus {
+            border-color: #ff6b6b;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .modal-btn-confirm {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        .modal-btn-cancel {
+            background: #ddd;
+            color: #666;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #ccc;
+            transform: scale(1.05);
+        }
+
         /* 点击爱心爆炸 */
         .click-heart {
             position: fixed;
@@ -866,7 +965,7 @@
     <div class="days-counter" id="daysCounter"></div>
 
     <!-- 音乐控制 -->
-    <div class="music-control" id="musicControl"></div>
+    <div class="music-control show" id="musicControl"></div>
 
     <!-- 随机留言墙 -->
     <div class="sweet-message" id="sweetMessage">你是我的唯一 💕</div>
@@ -879,6 +978,18 @@
     <div class="photo-modal" id="photoModal">
         <div class="photo-modal-close" onclick="closePhotoModal()">✕</div>
         <img id="modalImage" src="" alt="放大查看">
+    </div>
+
+    <!-- 自定义编辑弹窗 -->
+    <div class="custom-modal" id="customModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">三木雅</div>
+            <input type="text" class="modal-input" id="modalInput" placeholder="请输入内容">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-confirm" onclick="confirmEdit()">确定</button>
+                <button class="modal-btn modal-btn-cancel" onclick="cancelEdit()">取消</button>
+            </div>
+        </div>
     </div>
 
     <div class="container">
@@ -1122,16 +1233,47 @@
             localStorage.setItem('sweetMessages', JSON.stringify(sweetMessages));
         }
 
+        // 自定义弹窗相关变量
+        let editCallback = null;
+
+        // 显示自定义编辑弹窗
+        function showCustomModal(title, currentValue, callback) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalInput').value = currentValue;
+            document.getElementById('customModal').classList.add('show');
+            document.getElementById('modalInput').focus();
+            editCallback = callback;
+        }
+
+        // 确认编辑
+        function confirmEdit() {
+            const newValue = document.getElementById('modalInput').value.trim();
+            if (newValue !== '' && editCallback) {
+                editCallback(newValue);
+            }
+            closeCustomModal();
+        }
+
+        // 取消编辑
+        function cancelEdit() {
+            closeCustomModal();
+        }
+
+        // 关闭自定义弹窗
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.remove('show');
+            editCallback = null;
+        }
+
         // 编辑照片标题
         function editPhotoCaption(index) {
             const currentCaption = photoData[index].caption;
-            const newCaption = prompt('✏️ 修改当前照片标题：', currentCaption);
-            if (newCaption !== null && newCaption.trim() !== '') {
-                photoData[index].caption = newCaption.trim();
+            showCustomModal('三木雅 - 编辑照片标题', currentCaption, (newCaption) => {
+                photoData[index].caption = newCaption;
                 saveToStorage();
                 updatePhotoCaption(currentPhotoIndex);
                 alert('✅ 修改成功！已保存');
-            }
+            });
         }
 
         // 当前显示的留言索引
@@ -1140,13 +1282,12 @@
         // 编辑留言墙 - 只编辑当前这一条
         function editCurrentMessage() {
             const currentMsg = sweetMessages[currentMessageIndex];
-            const newMsg = prompt('✏️ 修改当前留言：', currentMsg);
-            if (newMsg !== null && newMsg.trim() !== '') {
-                sweetMessages[currentMessageIndex] = newMsg.trim();
+            showCustomModal('三木雅 - 编辑留言', currentMsg, (newMsg) => {
+                sweetMessages[currentMessageIndex] = newMsg;
                 saveToStorage();
                 updateRandomMessage();
                 alert('✅ 修改成功！已保存');
-            }
+            });
         }
 
         function updateRandomMessage() {
@@ -1229,6 +1370,22 @@
             document.getElementById('sweetMessage').addEventListener('click', (e) => {
                 e.stopPropagation();
                 editCurrentMessage();
+            });
+
+            // 自定义弹窗键盘支持
+            document.getElementById('modalInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    confirmEdit();
+                } else if (e.key === 'Escape') {
+                    cancelEdit();
+                }
+            });
+
+            // 点击弹窗背景关闭
+            document.getElementById('customModal').addEventListener('click', (e) => {
+                if (e.target.id === 'customModal') {
+                    cancelEdit();
+                }
             });
         }
 
