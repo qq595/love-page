@@ -517,11 +517,30 @@
             border-radius: 15px;
             backdrop-filter: blur(10px);
             opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .photo-caption:hover {
+            transform: translateX(-50%) scale(1.05);
+            background: rgba(255, 107, 107, 0.6);
+        }
+
+        .photo-caption::before {
+            content: '✏️ ';
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-caption:hover::before {
+            opacity: 1;
         }
 
         .photo-caption.show {
+            opacity: 1;
+            pointer-events: all;
+        }
             opacity: 1;
         }
 
@@ -746,13 +765,30 @@
             color: #ff6b6b;
             font-weight: bold;
             opacity: 0;
-            transition: opacity 0.5s ease;
-            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.3s ease;
             white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sweet-message:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 5px 25px rgba(255, 107, 107, 0.5);
+        }
+
+        .sweet-message::before {
+            content: '✏️ ';
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sweet-message:hover::before {
+            opacity: 1;
         }
 
         .sweet-message.show {
             opacity: 1;
+            pointer-events: all;
         }
 
         @media (max-width: 480px) {
@@ -1002,6 +1038,9 @@
             const container = document.querySelector('.container');
             container.classList.add('hide');
             
+            // 从本地存储加载数据
+            loadFromStorage();
+            
             // 切换背景为图片
             document.body.classList.add('show-background');
             
@@ -1082,6 +1121,61 @@
             document.getElementById('daysCounter').textContent = `💑 在一起第 ${diffDays} 天 💑`;
         }
 
+        // 从本地存储加载数据
+        function loadFromStorage() {
+            // 加载照片数据
+            const savedPhotos = localStorage.getItem('photoData');
+            if (savedPhotos) {
+                const loaded = JSON.parse(savedPhotos);
+                loaded.forEach((item, index) => {
+                    if (photoData[index]) {
+                        photoData[index].caption = item.caption;
+                    }
+                });
+            }
+
+            // 加载留言数据
+            const savedMessages = localStorage.getItem('sweetMessages');
+            if (savedMessages) {
+                const loaded = JSON.parse(savedMessages);
+                sweetMessages.length = 0;
+                sweetMessages.push(...loaded);
+            }
+        }
+
+        // 保存到本地存储
+        function saveToStorage() {
+            localStorage.setItem('photoData', JSON.stringify(photoData));
+            localStorage.setItem('sweetMessages', JSON.stringify(sweetMessages));
+        }
+
+        // 编辑照片标题
+        function editPhotoCaption(index) {
+            const newCaption = prompt('修改照片标题：', photoData[index].caption);
+            if (newCaption !== null && newCaption.trim() !== '') {
+                photoData[index].caption = newCaption.trim();
+                saveToStorage();
+                updatePhotoCaption(currentPhotoIndex);
+                alert('✅ 修改成功！已保存');
+            }
+        }
+
+        // 编辑留言墙
+        function editMessages() {
+            const currentMessages = sweetMessages.join('\n');
+            const newMessages = prompt('编辑留言（每行一条）：\n', currentMessages);
+            if (newMessages !== null && newMessages.trim() !== '') {
+                const lines = newMessages.split('\n').filter(line => line.trim() !== '');
+                if (lines.length > 0) {
+                    sweetMessages.length = 0;
+                    sweetMessages.push(...lines);
+                    saveToStorage();
+                    updateRandomMessage();
+                    alert('✅ 修改成功！已保存');
+                }
+            }
+        }
+
         function updateRandomMessage() {
             const messageEl = document.getElementById('sweetMessage');
             const randomMsg = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
@@ -1142,6 +1236,18 @@
                     e.stopPropagation();
                     openPhotoModal(photoData[currentPhotoIndex].src);
                 });
+            });
+
+            // 点击照片标题编辑
+            document.getElementById('photoCaption').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editPhotoCaption(currentPhotoIndex);
+            });
+
+            // 点击留言墙编辑
+            document.getElementById('sweetMessage').addEventListener('click', (e) => {
+                e.stopPropagation();
+                editMessages();
             });
         }
 
